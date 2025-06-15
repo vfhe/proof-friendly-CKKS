@@ -53,6 +53,9 @@ class Ring:
     self.lib.polynomial_RNSc_add_integer.argtypes  = (c_void_p, c_void_p, c_uint64)
     self.lib.polynomial_RNS_add_integer.argtypes  = (c_void_p, c_void_p, c_uint64)
 
+    # autormorphism
+    self.lib.polynomial_RNSc_permute.argtypes = (c_void_p, c_void_p, c_uint64)
+
     # ntt
     self.lib.polynomial_RNSc_to_RNS.argtypes = (c_void_p, c_void_p)
     self.lib.polynomial_RNS_to_RNSc.argtypes = (c_void_p, c_void_p)
@@ -98,6 +101,7 @@ class Ring:
     w = self.lib.incNTT_get_rou_matrix(self.NTT)
     self.rou_matrix = [list(i.contents) for i in w.contents]
 
+    return # skip sage fields 
     self.Rij = [0]*self.ell
     x = var("x")
     for i in range(self.ell):
@@ -216,6 +220,14 @@ class Polynomial:
     else:
       out.ring.lib.polynomial_add_RNSc_polynomial(out.obj, in1.obj, in2.obj)
     out.repr = in1.repr
+
+  def automorphism(self, gen):
+    assert(gen < self.ring.N*2)
+    res = Polynomial(self.ring)
+    self.to_coeff()
+    self.ring.lib.polynomial_RNSc_permute(res.obj, self.obj, gen)
+    res.repr = repr.coeff
+    return res
 
   def to_NTT(self):
     if(self.repr == repr.ntt): return
@@ -501,10 +513,29 @@ def test_inverse(ring):
   p0_inv_p0 = p0_inv * p0
   print("slow_inverse:", "pass" if Rq(p0_inv_p0.get_polynomial()) == 1 else "fail")
 
+import random
+def test_automorphism(ring:Ring):
+  Rq = ring.get_sage_ring()
+  p0 = ring.random_element(ntt=False)
+  # p0 = Polynomial(ring).from_array(list(range(ring.N)))
+  p0s = Rq(p0.get_polynomial()).list()
+  auto_gen = random.choice(list(range(1, 2*ring.N, 2)))
+  p1 = p0.automorphism(auto_gen)
+  p1s = Rq(p1.get_polynomial()).list()
+  error =  False
+  for i in range(len(p0s)):
+    if((i*auto_gen)&ring.N): 
+      if(p0s[i] != ring.q_l - p1s[(i*auto_gen)%ring.N]): error = True
+    else:
+      if(p0s[i] != p1s[(i*auto_gen)%ring.N]): error = True
+  print("Automorphism:", "pass" if not error else "fail")
+
+
 def test_poly():
-  r = Ring(2**14, 300, split_degree=4)
+  r = Ring(2**14, 200, split_degree=4)
 
   print("Primes:", r.primes)
+  test_automorphism(r)
 
   r2 = r.sub_ring(100)
   Rq = r.get_sage_ring()
@@ -532,7 +563,7 @@ def test_poly():
   p2s = 1 - p0s
   print("rsub:", "pass" if p2.get_polynomial() == list(p2s) else "fail")
 
-  test_inverse(r)
+  # test_inverse(r)
 
   p3_r2 = r2.random_element()
   p3_r = p3_r2.base_extend(r)

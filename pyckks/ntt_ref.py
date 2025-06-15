@@ -9,7 +9,6 @@ class FFT:
     self.rou = CC(exp(2*pi*1j/(2*N)))
     self.rous = [self.rou**i for i in range(N)]
     self.inv_rous = [i**-1 for i in self.rous]
-    # print(self.rous, self.inv_rous)
     self.br_rous = self.bit_reverse_reorder(self.rous)
     self.br_inv_rous = self.bit_reverse_reorder(self.inv_rous)
     self.N = N

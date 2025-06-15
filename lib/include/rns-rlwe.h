@@ -99,7 +99,6 @@ void free_RNS_polynomial(void * p);
 void polynomial_RNSc_negate(RNSc_Polynomial out, RNSc_Polynomial in);
 void polynomial_add_RNSc_polynomial(RNSc_Polynomial out, RNSc_Polynomial in1, RNSc_Polynomial in2);
 void polynomial_add_RNS_polynomial(RNS_Polynomial out, RNS_Polynomial in1, RNS_Polynomial in2);
-void polynomial_RNSc_permute(RNSc_Polynomial out, RNSc_Polynomial in, uint64_t gen);
 void polynomial_int_permute_mod_Q(IntPolynomial out, IntPolynomial in, uint64_t gen);
 void polynomial_copy_RNS_polynomial(RNS_Polynomial out, RNS_Polynomial in);
 void polynomial_reduce_mod_Xd_minus_1_mod_q(uint64_t * p, int64_t d, uint64_t q, size_t size);

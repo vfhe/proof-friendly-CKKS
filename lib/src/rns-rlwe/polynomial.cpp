@@ -569,18 +569,23 @@ void polynomial_base_reduce_RNSc_and_scale(RNSc_Polynomial out, uint64_t p){
 }
 
 
-
 void polynomial_RNSc_permute(RNSc_Polynomial out, RNSc_Polynomial in, uint64_t gen){
-  const uint64_t N = out->N;
-  assert(gen < N);
+  assert(out != in);
+  const uint64_t N = out->N, mod_mask = N - 1, split_degree =  out->ntt->split_degree, split_degree_mod = split_degree - 1, split_degree_log = log2(split_degree);
+  const uint64_t poly_size = out->N/out->ntt->split_degree;
+  assert(gen < 2*N);
   assert(gen > 0);
-  uint64_t idx = 0;
   polynomial_RNS_zero((RNS_Polynomial) out);
-  for (size_t i = 0; i < N; i++){
-    for (size_t j = 0; j < out->l; j++){
-      out->coeffs[j][idx] = in->coeffs[j][i];
+  for (size_t i = 0; i < split_degree; i++){
+    for (size_t i2 = 0; i2 < poly_size; i2++){
+      const uint64_t idx = ((i + (i2<<split_degree_log))*gen);
+      const uint64_t dst = (idx&split_degree_mod)*poly_size + ((idx&mod_mask)>>split_degree_log);
+      for (size_t j = 0; j < out->l; j++){
+        const uint64_t p = out->ntt->ntt[j]->GetModulus();
+        if(idx&N) out->coeffs[j][dst] = p - in->coeffs[j][i*poly_size + i2];
+        else out->coeffs[j][dst] = in->coeffs[j][i*poly_size + i2];
+      }
     }
-    idx = intel::hexl::AddUIntMod(idx, gen, N);
   }
 }
 
