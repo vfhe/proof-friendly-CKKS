@@ -8,6 +8,7 @@ class FFT:
   def __init__(self, N:int) -> FFT:
     self.rou = CC(exp(2*pi*1j/(2*N)))
     self.rous = [self.rou**i for i in range(N)]
+    # just change to 5*i and see what happens
     self.inv_rous = [i**-1 for i in self.rous]
     self.br_rous = self.bit_reverse_reorder(self.rous)
     self.br_inv_rous = self.bit_reverse_reorder(self.inv_rous)
@@ -73,32 +74,22 @@ class FFT:
     brev = lambda x: int(bin(x)[2:].rjust(size, "0")[::-1], 2) 
     return [v[brev(i)] for i in range(2**size)]
 
-
 ## example:
 def basic_test():
   q = 769
   N = 16
-  Z_q = ZZ.quo(q*ZZ)
-  r = PolynomialRing(Z_q, name="x")
-  x = r.gen()
-  Z_qX = r.quo(x**N + 1)
-  x = Z_qX.gen()
-  inv_N = Z_q(N)**-1
+  fft = FFT(N)
 
-  w_1 = Z_q.zeta(2*N)
-  w = [Z_q(w_1**i) for i in range(N)]
-  w_r = bit_reverse_reorder(w, 4)
-  print(w_r)
-  w_inv = [i**-1 for i in w]
-  w_r_inv = bit_reverse_reorder(w_inv)
+  mul = lambda x,y: [i*j for i,j in zip(x,y)]
+  
+  a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+  b = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-  a = Z_qX([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
-  b = Z_qX([0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+  # print(fft.CT_NR(a, fft.br_rous))
+  # print(fft.CT_NR(b, fft.br_rous))
+  print(mul(fft.GS_RN(fft.CT_NR(a, fft.br_rous), fft.br_inv_rous), [1/N]*N))
 
-  print(sum(a.list()))
-  print(CT_NR(a, w_r))
-  print(CT_NR(b, w_r))
-  print(mul(GS_RN(Z_qX(CT_NR(a, w_r)), w_r_inv), [inv_N]*N))
+  print(mul(fft.GS_RN(mul(fft.CT_NR(a, fft.br_rous), fft.CT_NR(b, fft.br_rous)), fft.br_inv_rous), [1/N]*N))
 
-  print(mul(GS_RN(Z_qX(mul(CT_NR(a, w_r), CT_NR(b, w_r))), w_r_inv), [inv_N]*N))
-
+if __name__ == "__main__":
+  basic_test()

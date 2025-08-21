@@ -99,6 +99,9 @@ class CKKS:
     tildeC1prime = (tildeC1 - (tildeC1 % p))*inv_p
     return (tildeC0prime, tildeC1prime)
 
+  def automorphism5j(self, ct, j, l):
+    pass
+
   def encode(self, x:list[int|float]) -> Polynomial:
     assert(len(x) == self.N//2)
     # inv pi
@@ -178,7 +181,7 @@ class CKKS:
 import time
 
 def bench_ckks():
-  REPs = 1000
+  REPs = 100
   Rq = Ring(2**14, 250, split_degree=4)
   print(Rq.primes, Rq.split_degree)
   ckks = CKKS(Rq, 2**49, 3.2, 3.2)
@@ -192,7 +195,7 @@ def bench_ckks():
     bmul = b*b2
   end = time.time_ns()
   print("Multiplication: %lf ms" % ((end - start)/1000000/REPs))
-  c = ckks.decrypt(bmul, sk, delta=ckks.delta**2/Rq.primes[Rq.ell - 1])
+  c = ckks.decrypt(bmul, sk)
   print(c[:10], sep="\n\n")
 
 def test_ckks():
@@ -212,7 +215,7 @@ def test_ckks():
     print(c[:10], sep="\n\n")
 
 def test_ckks_auto():
-  Rq = Ring(16, 250, split_degree=1)
+  Rq = Ring(16, 250, split_degree=4)
   ckks = CKKS(Rq, 2**49, 3.2, 3.2)
   sk = ckks.gen_key()
   ckks.gen_ksk_auto_set(sk, [1, 3, 5, 7, 9, 11, 13, 15])
@@ -273,6 +276,7 @@ def test_encode():
     print("i: %d" % i, c[:10], sep="\n", end="\n\n")
 
 if __name__ == "__main__":
-  test_ckks_auto()
+  bench_ckks()
+  # test_ckks_auto()
   # test_ckks_add_mul()
   # test_encode()

@@ -41,3 +41,6 @@ hexl/build:
 lib:
 	mkdir -p lib
 
+clean:
+	rm --f -r lib/ src/third-party/hexl/build/
+

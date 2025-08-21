@@ -1,5 +1,4 @@
 #include <rns-rlwe.h>
-#include <benchmark_util.h>
 
 class Libra
 {
@@ -195,9 +194,7 @@ extern "C" {
 // C wrapper
 void libra_sumcheck(RNS_Polynomial ** a, RNS_Polynomial * A, RNS_Polynomial * r, uint64_t ell){
   Libra libra(ell);
-  MEASURE_TIME("", 10, "Libra sumcheck", 
-    libra.sumCheck_mt(a, A, r);
-  );
+  libra.sumCheck_mt(a, A, r);
 }
 
 #ifdef __cplusplus

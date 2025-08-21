@@ -21,6 +21,7 @@ void field_mul_addto(uint64_t * out, uint64_t * in1, uint64_t * in2, uint64_t si
 
 
 #define REPS 100
+#define THREADS 1
 
 #define MATRIX_y 256*5
 #define MATRIX_x ((int)(MATRIX_y*0.178/5))
@@ -112,7 +113,6 @@ void test_arith(){
   );
 
 }
-#define THREADS 1
 
 typedef struct _encoding_arg{
   uint64_t * in;
