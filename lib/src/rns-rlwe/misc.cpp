@@ -105,43 +105,6 @@ void compute_RNS_Qhat_array(uint64_t * out, uint64_t * p, uint64_t l){
   }
 }
 
-// out = a*b
-// a and out are (size*64)-bit multi-precision integers 
-// b is a 64-bit integer
-void mpi_mul_int(uint64_t * out, uint64_t * a, uint64_t b, uint64_t size){
-  uint64_t carry, tmp = a[0];
-  out[0] = 0;
-  for (size_t i = 0; i < size - 1; i++){
-    out[i] += _mulx_u64 (tmp, b, (unsigned long long *)&carry);
-    tmp = out[i + 1];
-    out[i + 1] = carry;
-  }
-}
-
-void mpi_addto(uint64_t * out, uint64_t * in, uint64_t size){
-
-}
-
-void RNS_compose(uint64_t * out, uint64_t * in, uint64_t * p, uint64_t * qi_hat, uint64_t l){
-  // WIP
-  // Z_Q(Q/q[i]) * Z_Q((Z_q[i](Q/q[i]))**-1)
-  assert(l <= 32);
-  uint64_t prod[32];
-  for (size_t i = 0; i < l; i++){
-    memset(prod, 0, sizeof(uint64_t)*l);
-    prod[0] = in[0];
-    // prod Q/q_i
-    for (size_t j = 0; j < l; j++){
-      if(i!=j){
-        mpi_mul_int(prod, prod, p[j], l);
-      }
-    }
-    // prod Qi_hat
-    mpi_mul_int(prod, prod, qi_hat[i], l);
-    // add to out
-
-  }
-}
 
 double __debug_global_avg_var = 0.;
 uint64_t __debug_decryption_count = 0;

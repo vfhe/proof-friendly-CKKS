@@ -1,4 +1,5 @@
-CC = g++
+CC = gcc
+CXX = g++
 INCLUDE_DIRS = ./include/ ./src/third-party/hexl/hexl/include/
 FLAGS = -Wall -Wno-unused-function -Wno-unused-result -funroll-all-loops -march=native -lm -Wno-sign-compare -Wno-write-strings 
 LD_LIBS = hexl
@@ -27,16 +28,16 @@ ALL_SRC = $(addprefix ./src/, $(SRC))  $(addprefix ./src/third-party/blake3/, $(
 all: lib lib/librings
 
 main: $(ALL_SRC) main_benchmark.cpp
-	$(CC) -g -o main $^ $(OPT_FLAGS) $(LIBS)
+	$(CXX) -g -o main $^ $(OPT_FLAGS) $(LIBS)
 
 lib/librings: $(ALL_SRC) 
-	$(CC) -g -fPIC -shared -o lib/librings.so $^ $(LIB_FLAGS) $(LIBS)
+	$(CXX) -g -fPIC -shared -o lib/librings.so $^ $(LIB_FLAGS) $(LIBS)
 
 hexl: hexl/build
 	cmake --build ./src/third-party/hexl/build
 
 hexl/build:
-	cmake -S ./src/third-party/hexl/ -B ./src/third-party/hexl/build
+	cmake -D CMAKE_C_COMPILER=$(CC) CMAKE_CXX_COMPILER=$(CXX) -S ./src/third-party/hexl/ -B ./src/third-party/hexl/build
 
 lib:
 	mkdir -p lib
