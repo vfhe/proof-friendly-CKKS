@@ -9,7 +9,7 @@ uint64_t RoundqQ(uint64_t v, uint64_t q, uint64_t Q) {
 }
 
 // Functions adapted from MOSFHET
-#if defined(__x86_64__) || defined(_M_X64)
+#if defined(__x86_64__)
 // TODO: add code src.
 void generate_rnd_seed(uint64_t * p){
   if(0 == _rdrand64_step ((unsigned long long *) p) ||
