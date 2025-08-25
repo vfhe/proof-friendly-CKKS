@@ -56,6 +56,12 @@ The Python code will compile the C library during the first execution. You can r
     Recompiles our C library, but not HEXL. Use it if you make any modifications in our C code.
 ```
 
+```
+  --cc=X
+  --cxx=X
+    Defines the compiler for C and CPP code, respectively. For example `--cxx=g++-15`.
+```
+
 > [!WARNING]
 > The optimized version of this implementation requires [AVX-512 IFMA](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions#AVX-IFMA). It should be significantly slower and possibly unstable without it (but it should still work).
   
