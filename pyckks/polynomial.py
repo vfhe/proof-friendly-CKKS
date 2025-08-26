@@ -1,9 +1,9 @@
 from __future__ import annotations
-from librings import *
+from .librings import *
 import math
 from sage.all import next_prime, previous_prime, is_prime, ZZ, cyclotomic_polynomial, crt, var
 import numpy as np
-import rlwe
+from . import rlwe
 
 next_power_of_2 = lambda x: 1 << int(math.ceil(math.log2(x)))
 

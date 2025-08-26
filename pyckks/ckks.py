@@ -1,6 +1,6 @@
 from __future__ import annotations
-from polynomial import *
-from ntt_ref import FFT, CC
+from .polynomial import *
+from .ntt_ref import FFT, CC
 from math import sqrt
 from copy import copy
 

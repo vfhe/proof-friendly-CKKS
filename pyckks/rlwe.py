@@ -1,9 +1,9 @@
 from __future__ import annotations
-from librings import *
+from .librings import *
 import math
 from sage.all import next_prime, previous_prime, is_prime, ZZ, cyclotomic_polynomial, crt
 import numpy as np
-from polynomial import *
+from .polynomial import *
 
 
 # linear only RLWE for the proofs

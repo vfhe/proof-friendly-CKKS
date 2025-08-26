@@ -1,6 +1,6 @@
 from __future__ import annotations
-from polynomial import *
-from librings import *
+from .polynomial import *
+from .librings import *
 import random
 from math import log2, ceil
 from copy import copy
