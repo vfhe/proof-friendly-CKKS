@@ -72,7 +72,7 @@ The Python code will compile the C library during the first execution. You can r
 python3 pyckks/ckks.py
 ```
 
-- You can change parameters in line 184 to 187 of [pyckks/ckks.py](./pyckks/ckks.py). 
+- You can change parameters in lines 184 to 187 of [pyckks/ckks.py](./pyckks/ckks.py). 
 - Defaults are `(N,d,L) = (2^14, 4, 6)`.
 
 #### SumCheck benchmark:
@@ -93,7 +93,7 @@ cd lib
 make main
 ./main
 ```
-- You can change parameters in lines 26 to 30 of [lib/main_benchmark.cpp](./lib/main_benchmark.cpp). For default parameters, `MATRIX_y` is `sqrt(n)*5`, for a commitment with `2^n` variables. `RS_cw_sz` must be adjusted accordingly, such that `MATRIX_x/RS_cw_sz` is the RS code rate.
+- You can change parameters in lines 26 to 30 of [lib/main_benchmark.cpp](./lib/main_benchmark.cpp). For default parameters, `MATRIX_y` is $5\sqrt{n}$, for a commitment with $\log_2(n)$ variables. `RS_cw_sz` must be adjusted accordingly, such that `MATRIX_x/RS_cw_sz` is the RS code rate.
 - You can change the number of threads in line 24 of [lib/main_benchmark.cpp](./lib/main_benchmark.cpp). Notice that this will run the same code (but with different inputs of the same size) multi times in parallel (since we always perform many commitments at once, there is no reason for internal parallelism). 
 
 
