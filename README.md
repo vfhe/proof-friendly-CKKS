@@ -42,7 +42,7 @@
 git clone https://github.com/vfhe/proof-friendly-CKKS.git
 ```
 
-### Running the python code
+### Running the Python code
 
 
 The Python code will compile the C library during the first execution. You can recompile the C code using the following flags **at the end** of any python command:
@@ -64,26 +64,26 @@ The Python code will compile the C library during the first execution. You can r
 
 > [!WARNING]
 > The optimized version of this implementation requires [AVX-512 IFMA](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions#AVX-IFMA). It should be significantly slower and possibly unstable without it (but it should still work).
-  
 
 #### Proof-friendly CKKS multiplication benchmark:
 
 ```
-python3 pyckks/ckks.py
+python3 -m pyckks.ckks
 ```
 
+- Notice that the `-m pyckks.ckks` is only required because you are running a module inside our library.
 - You can change parameters in lines 184 to 187 of [pyckks/ckks.py](./pyckks/ckks.py). 
 - Defaults are `(N,d,L) = (2^14, 4, 6)`.
 
 #### SumCheck benchmark:
 ```
-python3 pyckks/bench_sumcheck.py 10
+python3 -m pyckks.bench_sumcheck 10
 ```
 - Replace 10 with the number of variables.
 - You can change parameters in line 46 of [pyckks/bench_sumcheck.py](./pyckks/bench_sumcheck.py). 
 - Please note that this benchmark uses 48 threads. You can change this in line 47 of [lib/src/sumcheck.cpp](./lib/src/sumcheck.cpp). Remember to recompile the code with:
 `
-python3 pyckks/bench_sumcheck.py 10 --recompile
+python3 pyckks.bench_sumcheck 10 --recompile
 `
 
 ### Running CPP code
@@ -94,8 +94,19 @@ make main
 ./main
 ```
 - You can change parameters in lines 26 to 30 of [lib/main_benchmark.cpp](./lib/main_benchmark.cpp). For default parameters, `MATRIX_y` is $5\sqrt{n}$, for a commitment with $\log_2(n)$ variables. `RS_cw_sz` must be adjusted accordingly, such that `MATRIX_x/RS_cw_sz` is the RS code rate.
-- You can change the number of threads in line 24 of [lib/main_benchmark.cpp](./lib/main_benchmark.cpp). Notice that this will run the same code (but with different inputs of the same size) multi times in parallel (since we always perform many commitments at once, there is no reason for internal parallelism). 
+- You can change the number of threads in line 24 of [lib/main_benchmark.cpp](./lib/main_benchmark.cpp). Notice that this will run the same code (but with different inputs of the same size) multiple times in parallel (since we always perform many commitments at once, there is no reason for internal parallelism). 
 
+### Instructions for MAC
+
+The Python library should also work on MAC, but performance will be **significantly** worse. We suggest following these steps:
+1. Install a GNU C++ compiler, if you don't have one.
+  ```
+brew install gcc
+```
+3. Compile our code with the following command, replacing `X` with the version of g++ installed by brew. 
+  ```
+python3 -m pyckks.ckks --cxx=g++-X
+``` 
 
 # License
 
