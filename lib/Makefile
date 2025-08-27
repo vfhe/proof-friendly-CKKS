@@ -43,5 +43,5 @@ lib:
 	mkdir -p lib
 
 clean:
-	rm --f -r lib/ src/third-party/hexl/build/
+	touch lib; touch src/third-party/hexl/build/; rm -rf lib/ src/third-party/hexl/build/
 
