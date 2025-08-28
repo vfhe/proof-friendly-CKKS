@@ -37,7 +37,7 @@ class LibRings:
     _B = "-B" if force_recompile else ""
     print("\nCompiling Rings C library")
     if(self.is_AVX512ifma_supported()):
-      os.system("make %s %s -C %s ENABLE_VAES=1 ENABLE_AVX512=1" % (self.compiler, _B, self.lib_make_path))
+      os.system("make %s %s -C %s ENABLE_VAES=true ENABLE_AVX512=true" % (self.compiler, _B, self.lib_make_path))
       print("\nFinished compiling\nResuming python code\n")
     else:
       print("\033[93m" + "AVX512ifma not detected" +

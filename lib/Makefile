@@ -6,7 +6,7 @@ LD_LIBS = hexl
 LIB_DIRS = ./src/third-party/hexl/build/hexl/lib 
 LIBS += $(addprefix -L, $(LIB_DIRS)) $(addprefix -l, $(LD_LIBS)) 
 INCLUDE_FLAGS = $(addprefix -I, $(INCLUDE_DIRS))
-FLAGS += $(INCLUDE_FLAGS) -DAVX512_OPT
+FLAGS += $(INCLUDE_FLAGS)
 OPT_FLAGS = -O3 -fwhole-program -flto  $(FLAGS)
 LIB_FLAGS = -O3 $(FLAGS)
 
