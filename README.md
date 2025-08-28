@@ -105,15 +105,15 @@ brew install gcc
 ```
 2. Compile our code with the following command, replacing `X` with the version of g++ installed by brew. 
   ```
-python3 -m pyckks.ckks --cc=gcc-X --cxx=g++-X
+python3 -m pyckks.librings --arm --cc=gcc-X --cxx=g++-X
 ```
 3. If, for some reason, Python does not have access to the SageMath libraries, you can also run:
   ```
-sage --python -m pyckks.ckks --cc=gcc-X --cxx=g++-X
+sage --python -m pyckks.librings --arm --cc=gcc-X --cxx=g++-X
 ```
 Note that:
 - [Sage can also be installed on Mac OS with brew](https://formulae.brew.sh/cask/sage).
-- The option `--cc=gcc-X --cxx=g++-X` is only necessary when compiling for the first time, or when recompiling the C library. It is not needed afterwards. 
+- The option `--arm --cc=gcc-X --cxx=g++-X` is only necessary when compiling for the first time, or when recompiling the C library. It is not needed afterwards. 
 
 # License
 

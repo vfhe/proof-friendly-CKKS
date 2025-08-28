@@ -18,6 +18,9 @@ class Ciphertext:
     else:
       return Ciphertext(self.ckks, (self.obj[0]+other, copy(self.obj[1])), self.ell)
   
+  def __radd__(self, other:Ciphertext|Polynomial):
+    return self + other
+
   def __mul__(self, other:Ciphertext|int|Polynomial):
     if(type(other) is Ciphertext):
       assert(self.ell == other.ell)

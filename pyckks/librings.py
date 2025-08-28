@@ -4,9 +4,10 @@ from math import floor, log2
 import subprocess, sys, argparse
 
 class LibRings:
-  def __init__(self, full_recompile=False, recompile_librings=False, CC=None, CXX=None) -> None:
+  def __init__(self, full_recompile=False, recompile_librings=False, CC=None, CXX=None, arm=False) -> None:
     self.compiler = f"CC={CC} " if CC else ""
     self.compiler += f"CXX={CXX} " if CXX else ""
+    self.compiler += "ARM=true" if arm else ""
     self.multithreaded = False
     self.num_threads = 1
     script_dir = os.path.dirname(__file__)
@@ -54,9 +55,11 @@ parser.add_argument('--cc')
 parser.add_argument('--cxx')
 parser.add_argument('--full-recompile', action='store_true') 
 parser.add_argument('--recompile', action='store_true')
+parser.add_argument('--arm', action='store_true')
 args = parser.parse_known_args()[0]
 
 librings = LibRings(recompile_librings=args.recompile, 
                     full_recompile=args.full_recompile,
                     CC=args.cc,
-                    CXX=args.cxx)
+                    CXX=args.cxx,
+                    arm=args.arm)

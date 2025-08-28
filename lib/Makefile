@@ -10,6 +10,10 @@ FLAGS += $(INCLUDE_FLAGS)
 OPT_FLAGS = -O3 -fwhole-program -flto  $(FLAGS)
 LIB_FLAGS = -O3 $(FLAGS)
 
+ifeq ($(ARM), true)
+	FLAGS += -DARM_BUILD
+endif
+
 ifeq ($(ENABLE_VAES), true)
 	FLAGS += -DVAES_OPT
 endif
